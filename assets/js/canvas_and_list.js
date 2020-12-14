@@ -18,6 +18,8 @@ const main_content = document.getElementsByClassName("main_content")[0];
 const mobileSize = window.matchMedia("(min-width: 992px)");
 var wdt = sketch_combo.offsetWidth;
 var HalyardDisplay;
+var ex;
+var myCanvas;
 
 var names = [];
 var illImgs = [];
@@ -26,6 +28,9 @@ var selected_name_ill;
 var selected_name_txt;
 var selected_ill;
 var selected_txt;
+var loadingIll = true;
+var loadingTxt = true;
+var loading = true;
 
 
 
@@ -51,21 +56,7 @@ function downloadCanvas(){
 
 function preload(){
     toggleInfoButton();
-
     HalyardDisplay = loadFont('assets/css/fonts/HalyardDisplayBook.ttf');
-
-    //Loading all images into array
-    for (iFile of ill_filenames) {
-        let aIllustrazione = loadImage("assets/img/ill/"+iFile+".png");
-        illImgs.push(aIllustrazione);
-    }
-
-    for (tFile of txt_filenames) {
-        let aTesto = loadImage("assets/img/txt/"+tFile+".png");
-        txtImgs.push(aTesto);
-    }
-
-
 }
 
 
@@ -158,6 +149,19 @@ function toggleInfoButton() {
 }
 
 
+function loadingImages(image, filename){
+    return loadImage(filename, imageLoaded);
+
+    function imageLoaded(cart){
+        //console.log(image, loadingIll);
+        image = cart;
+
+    }
+}
+
+
+
+
 
 
 
@@ -181,21 +185,40 @@ for (let i = 0; i < document.getElementsByClassName("list_imgs").length; i++) {
 }
 
 
-/*for (let i = 0; i < document.getElementsByClassName("list_ill").length; i++) {
-    let ill_path = document.getElementsByClassName("list_ill")[i].src;
-    console.log(ill_path);
-}*/
-
-
 
 
 
 /* CANVAS INSTRUCTIONS */
 
 function setup(){
+    //Loading all images into array
+    for (iFile of ill_filenames) {
+        let aIllustrazione = loadingImages(iFile, "assets/img/ill/"+iFile+".png")
+        illImgs.push(aIllustrazione);
+
+        if (illImgs.length >= ill_filenames.length) {
+            console.log(illImgs.length, ill_filenames.length);
+            loadingIll = false;
+        }else{
+            loadingIll = true;
+        }
+    }
+
+    for (tFile of txt_filenames) {
+        let aTesto = loadingImages(tFile, "assets/img/txt/"+tFile+".png");
+        txtImgs.push(aTesto);
+
+        if (txtImgs.length >= txt_filenames.length) {
+            loadingTxt = false;
+        }else{
+            loadingTxt = true;
+        }
+    }
+
+
+
     ex = createGraphics(1080, 1080);
     ex.pixelDensity(1);
-    var myCanvas;
 
     if (mobileSize.matches) {
         wdt = sketch_combo.offsetWidth-15;
@@ -209,6 +232,8 @@ function setup(){
     
     myCanvas.parent("sketch_combo");
 
+
+
     selected_name_ill = names[0];
     selected_name_txt = names[1];
     selected_ill = illImgs[0];
@@ -221,23 +246,30 @@ function setup(){
 
 function draw(){
 
-    ex.background(255, 255, 255);
-    //Drawing images
-    ex.image(selected_ill, 0, 0, ex.width, ex.height);
-    ex.image(selected_txt, 0, 0, ex.width, ex.height);
+    if (loadingIll || loadingTxt) {
+        background(255, 255, 0);
+    } else if (loadingIll == false && loadingTxt == false){
+        //console.log("All loaded");
 
-    //Drawing texts
-    ex.textFont(HalyardDisplay);
-    ex.textSize(24);
-    ex.textAlign(LEFT);
-    ex.text("Secret Santa Chiara 2020", 40, ex.height-15);
-    ex.textAlign(RIGHT);
-    ex.text("ISIA U", ex.width-40, ex.height-15);
-    ex.textAlign(LEFT);
-    ex.text(selected_name_ill+" + "+selected_name_txt, 40, 30);
+        ex.background(255, 255, 255);
+        //Drawing images
+        ex.image(selected_ill, 0, 0, ex.width, ex.height);
+        ex.image(selected_txt, 0, 0, ex.width, ex.height);
 
-    //Rendering
-    image(ex, 0, 0, width, height);
+        //Drawing texts
+        ex.textFont(HalyardDisplay);
+        ex.textSize(24);
+        ex.textAlign(LEFT);
+        ex.text("Secret Santa Chiara 2020", 40, ex.height-15);
+        ex.textAlign(RIGHT);
+        ex.text("ISIA U", ex.width-40, ex.height-15);
+        ex.textAlign(LEFT);
+        ex.text(selected_name_ill+" + "+selected_name_txt, 40, 30);
+    
+        //Rendering
+        image(ex, 0, 0, width, height);
+
+    }
 }
 
 

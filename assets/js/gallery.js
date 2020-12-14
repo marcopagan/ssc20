@@ -53,25 +53,6 @@ function hideInfo(){
 }
 
 
-function toggleInfoButton() {
-    windowResized();
-    if (window.innerWidth > 1200) {
-        iInfo.style.display = 'none';
-        if (xInfo.style.display == 'block') {
-            xInfo.style.display = 'none';
-        }
-        if (info_big.style.display == 'block') {
-            info_big.style.display = 'none';
-            main_content.style.display = "block";
-        }
-    }else {
-        if (xInfo.style.display != 'block') {
-            iInfo.style.display = 'block';
-        }
-    }
-}
-
-
 function clickOnCartolina(cartolina) {
     if (mobileSize.matches) {
         $(document).ready(function(){
