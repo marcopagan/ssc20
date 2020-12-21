@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1 user-scalable=no">
+
+    <title>Secret Santa Chiara 2020 – ISIA U</title>
+    <meta name="description" content="Secret Santa Chiara 2020, ISIA Urbino">
+    <meta name="author" content="Marco Pagan">
+    <link rel="icon" href="assets/img/icon.png">
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="assets/js/p5.min.js"></script>
+
+</head>
+
+<body onresize="toggleInfoButton()">
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-light bg-light">
+        <div id="no_margin_lft_rgt" class="container-fluid">
+            <div class="navbar-brand" href="#"><span id="header_title">SSC <i>2020</i></span>
+                <div class="dropdown"><a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">GENERATORE</a>
+
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a id="dropdownItem" class="dropdown-item" href="gallery/">GALLERIA</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action_buttons">
+                <button onclick="randomButton()">RANDOM</button>
+                <button onclick="downloadCanvas()">DOWNLOAD</button>
+            </div>
+
+            <a onclick="showInfo()"><div id="iInfo" class="nav_info nav_info_open">i
+            </div></a>
+            <a onclick="hideInfo()"><div id="xInfo" class="nav_info nav_info_close">X
+            </div></a>
+        </div>
+    </nav>
+
+
+    <!-- CONTENT -->
+    <div class="main_content">
+        <div class="row">
+
+
+            <div id="ssc_canvas" class="col-lg-8 col-md-12 col-sm-12">
+
+                <div class="info_wrapper">
+                    <h1>Istruzioni 🎁</h1>
+                    <p>Scegli l'immagine e il testo per la tua cartolina dalla lista oppure lascia che sia il caso a decidere per te. Scarica la tua immagine personalizzata e scopri chi ti ha augurato buone feste!<br>Sfoglia le cartoline realizzate dalla comunità studentesca nella sezione galleria.<br>Buon Natale e buone festa da ISIA Urbino!</p>
+                    <h1>Playlist 🎈</h1>
+                    <iframe id="info_playlist_col" class="playlist_margin_col" src="https://open.spotify.com/embed/playlist/42CxUmQYbsTfaqg0m4zuN7" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+
+                </div>
+
+                <div class="app_wrapper">
+                    <div id="sketch_combo"></div>
+                </div>
+
+
+            </div>
+
+
+
+            <div id="ssc_list" class="col-lg-4 col-md-12 col-sm-12">
+                <h1>Cartoline 🎄</h1>
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+    <!-- INFO BIG -->
+    <div id="info_big">
+        <h1>Istruzioni 🎁</h1>
+        <p>Scegli l'immagine e il testo per la tua cartolina dalla lista oppure lascia che sia il caso a decidere per te. Scarica la tua immagine personalizzata e scopri chi ti ha augurato buone feste!<br>Sfoglia le cartoline realizzate dalla comunità studentesca nella sezione galleria.<br>Buon Natale e buone festa da ISIA Urbino!</p>
+        <h1>Playlist 🎈</h1>
+        <iframe id="info_playlist" class="playlist_margin_tot" src="https://open.spotify.com/embed/playlist/42CxUmQYbsTfaqg0m4zuN7" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+    </div>
+
+
+    <script type="text/javascript" src="assets/js/canvas_and_list.js"></script>
+
+
+
+</body>
+</html>
