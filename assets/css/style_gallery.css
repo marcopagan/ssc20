@@ -54,6 +54,9 @@
 
 
 /* GALLERY */
+.gallery_wrapper{
+  margin-bottom: 40px;
+}
 .gallery_name{
   padding-top: 30px;
 }
