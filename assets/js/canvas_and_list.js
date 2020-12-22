@@ -13,14 +13,16 @@ const iInfo = document.getElementById("iInfo");
 const xInfo = document.getElementById("xInfo");
 const sketch_combo = document.getElementById("sketch_combo");
 const header_title = document.getElementById("header_title");
+const info_playlist_col = document.getElementById("info_playlist_col");
 const main_content = document.getElementsByClassName("main_content")[0];
+const list_loading = document.getElementsByClassName("list_loading");
+const loading_text = document.getElementsByClassName("loading_text")[0];
 const mobileSize = window.matchMedia("(min-width: 992px)");
 var wdt = sketch_combo.offsetWidth;
 var HalyardDisplay;
 var ex;
 var myCanvas;
 
-var names = [];
 var illImgs = [];
 var txtImgs = [];
 var selected_name_ill;
@@ -70,7 +72,7 @@ function clickOnCartolina(cartolina){
 
         //Updating name and image
         let index = cartolina.className.split(" ")[2];
-        selected_ill = illImgs[index];
+        selected_ill = illImgs[index].img;
         selected_name_ill = cartolina.id;
 
 
@@ -87,7 +89,7 @@ function clickOnCartolina(cartolina){
 
         //Updating name and image
         let index = cartolina.className.split(" ")[2];
-        selected_txt = txtImgs[index];
+        selected_txt = txtImgs[index].img;
         selected_name_txt = cartolina.id;
     }
 }
@@ -128,6 +130,7 @@ function hideInfo(){
 
 
 function toggleInfoButton() {
+    windowResized();
     if (window.innerWidth > 1200) {
         iInfo.style.display = 'none';
         if (xInfo.style.display == 'block') {
@@ -144,31 +147,63 @@ function toggleInfoButton() {
     }
 }
 
+function createList(){
+    // Disable loading divs
+    list_loading[0].style.display = "none";
+    list_loading[1].style.display = "none";
+    info_playlist_col.style.display = "block";
+    loading_text.classList.remove("isLoading");
 
-function loadingImages(image, filename, type){
-    let aCart = loadImage(filename, imageLoaded);
+    //Iterate between people
+    for (let i = 0; i < illImgs.length; i++) {
+        let inputIll = illImgs[i];
+        let inputTxt = txtImgs[i];
+        ssc_list.insertAdjacentHTML('beforeend', '<div id="'+inputIll.name+'" class="person_wrapper"><h3>'+inputIll.name+'</h3><img id="'+inputIll.name+'" class="list_imgs list_ill '+i+'" src="'+inputIll.thumb+'"><img id="'+inputIll.name+'" class="list_imgs list_txt '+i+'" src="'+inputTxt.thumb+'"></div>');
+    }
+    
+    //Adding click event on imgs
+    for (let i = 0; i < document.getElementsByClassName("list_imgs").length; i++) {
+        let cartolina = document.getElementsByClassName("list_imgs")[i];
+        cartolina.onclick = function() {clickOnCartolina(cartolina)};
+    }
+}
+
+
+function loadingImages(image, filename, thumbPath, type, index){
+    let name = filename.split("-")[1].replace(' ', '').split(".")[0];
+    let cart = loadImage(filename, imageLoaded);
+    let obj = {
+        index : index,
+        thumb: thumbPath,
+        name: name,
+        img: cart
+    }
 
     function imageLoaded(){
 
         if (type == "ill") {
-            illImgs.push(aCart);
+            illImgs.push(obj);
             //console.log("Ill: " + illImgs.length + "/" + ill_filenames.length);
 
             if (illImgs.length >= ill_filenames.length) {
                 loadingIll = false;
-                randomChoice();
+                if (loadingTxt == false) {
+                    areReady();
+                }
             }else{
                 loadingIll = true;
             }
 
 
         } else if (type == "txt") {
-            txtImgs.push(aCart);
+            txtImgs.push(obj);
             //console.log("Txt: " + txtImgs.length + "/" + txt_filenames.length);
 
             if (txtImgs.length >= txt_filenames.length) {
                 loadingTxt = false;
-                randomChoice();
+                if (loadingIll == false) {
+                    areReady();
+                }
             }else{
                 loadingTxt = true;
             }
@@ -180,28 +215,16 @@ function loadingImages(image, filename, type){
 }
 
 
-
-
-
-
-
-/* LIST INSTRUCTIONS */
-
-//Populating names array
-for (person of ill_filenames){
-    let name = person.split("-")[1].replace(' ', '').split(".")[0];
-    names.push(name);
+function sortLists(){
+    illImgs.sort((a, b) => parseFloat(a.index) - parseFloat(b.index));
+    txtImgs.sort((a, b) => parseFloat(a.index) - parseFloat(b.index));
 }
 
-//Iterate between people
-for (let i = 0; i < names.length; i++) {
-    ssc_list.insertAdjacentHTML('beforeend', '<div id="'+names[i]+'" class="person_wrapper"><h3>'+names[i]+'</h3><img id="'+names[i]+'" class="list_imgs list_ill '+i+'" src="assets/img/thumb/ill/'+ill_filenames[i]+'.jpg"><img id="'+names[i]+'" class="list_imgs list_txt '+i+'" src="assets/img/thumb/txt/'+txt_filenames[i]+'.jpg"></div>');
-}
 
-//Adding click event on imgs
-for (let i = 0; i < document.getElementsByClassName("list_imgs").length; i++) {
-    let cartolina = document.getElementsByClassName("list_imgs")[i];
-    cartolina.onclick = function() {clickOnCartolina(cartolina)};
+function areReady(){
+    sortLists();
+    createList();
+    randomChoice();
 }
 
 
@@ -212,22 +235,28 @@ for (let i = 0; i < document.getElementsByClassName("list_imgs").length; i++) {
 
 function setup(){
     toggleInfoButton();
+
     HalyardDisplay = loadFont('assets/css/fonts/HalyardDisplayBook.ttf');
     letter_img = loadImage('assets/img/letter_icon.png');
 
-    //Loading all images into array
-    for (iFile of ill_filenames) {
-        loadingImages(iFile, "assets/img/ill/"+iFile+".png", "ill");
-    }
-
-    for (tFile of txt_filenames) {
-        loadingImages(tFile, "assets/img/txt/"+tFile+".png", "txt");
-    }
-
-
-
     ex = createGraphics(1080, 1080);
     ex.pixelDensity(1);
+    myCanvas = createCanvas(wdt, wdt);
+    myCanvas.parent("sketch_combo");
+
+    //Loading all images into array
+    let iIndex = 0;
+    for (iFile of ill_filenames) {
+        loadingImages(iFile, "assets/img/ill/"+iFile+".png", "assets/img/thumb/ill/"+iFile+".jpg", "ill", iIndex);
+        iIndex++;
+    }
+
+    let tIndex = 0;
+    for (tFile of txt_filenames) {
+        loadingImages(tFile, "assets/img/txt/"+tFile+".png", "assets/img/thumb/txt/"+tFile+".jpg", "txt", tIndex);
+        tIndex++;
+    }
+
 
     if (mobileSize.matches) {
         wdt = sketch_combo.offsetWidth-15;
@@ -236,10 +265,7 @@ function setup(){
         wdt = sketch_combo.offsetWidth-30;
         header_title.innerHTML = "SSC <i>2020</i>";
     }
-    myCanvas = createCanvas(wdt, wdt);
 
-    
-    myCanvas.parent("sketch_combo");
 }
 
 
