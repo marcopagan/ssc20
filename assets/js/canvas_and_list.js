@@ -270,7 +270,7 @@ function setup(){
     //Loading all images into array
     let iIndex = 0;
     for (iFile of ill_filenames) {
-        loadingImages(iFile, "assets/img/ill/"+iFile+".png", "assets/img/thumb/ill/"+iFile+".jpg", "ill", iIndex);
+        loadingImages(iFile, "assets/img/ill/"+iFile+".jpg", "assets/img/thumb/ill/"+iFile+".jpg", "ill", iIndex);
         iIndex++;
     }
 

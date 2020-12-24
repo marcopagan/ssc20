@@ -57,7 +57,7 @@ function clickOnCartolina(cartolina) {
         $(document).ready(function(){
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
-        lightbox_ill.src = "../assets/img/ill/"+ill_filenames[cartolina.id]+".png";
+        lightbox_ill.src = "../assets/img/ill/"+ill_filenames[cartolina.id]+".jpg";
         lightbox_txt.src = "../assets/img/txt/"+txt_filenames[cartolina.id]+".png";
         lightbox_name.innerHTML = names[cartolina.id];
         lightbox.style.display = "block";
