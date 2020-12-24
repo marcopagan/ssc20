@@ -258,7 +258,6 @@ function areReady(){
 
 function setup(){
     toggleInfoButton();
-    frameRate(1);
 
     HalyardDisplay = loadFont('assets/css/fonts/HalyardDisplayBook.ttf');
     letter_img = loadImage('assets/img/letter_icon.png');
