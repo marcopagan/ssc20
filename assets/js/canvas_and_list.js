@@ -303,7 +303,7 @@ function draw(){
 
 
         // Snowflakes text
-        if (progress > 1) {
+        /*if (progress > 1) {
             if (progress > preprogress) {
                 let aLetter = {
                     x: random(40, width-40),
@@ -330,7 +330,7 @@ function draw(){
         translate(width/2, height/2);
         rotate(HALF_PI);
         arc(0, 0, width/2, height/2, 0, map(progress, 0, numbers_of_cartoline, 0, TWO_PI), PIE);
-        pop();
+        pop();*/
 
         //fill(141, 142, 145);
         //rect(width/4, height/2 + progressHgt, width-(width/2), progressHgt);
