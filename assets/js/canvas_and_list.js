@@ -33,6 +33,7 @@ var loadingTxt = true;
 
 var letters = [];
 var letter_img;
+var letter_font;
 var preprogress = 0;
 var numbers_of_cartoline = ill_filenames.length;
 
@@ -260,6 +261,7 @@ function setup(){
     toggleInfoButton();
 
     HalyardDisplay = loadFont('assets/css/fonts/HalyardDisplayBook.ttf');
+    letter_font = loadFont('assets/css/fonts/letter.ttf');
     letter_img = loadImage('assets/img/letter_icon.png');
 
     ex = createGraphics(1080, 1080);
@@ -298,12 +300,12 @@ function draw(){
     if (loadingIll || loadingTxt) {
         background(241, 242, 245);
         noStroke();
-        textFont(HalyardDisplay);
+        textAlign(CENTER);
         let progress = int((illImgs.length + txtImgs.length)/2);
 
 
         // Snowflakes text
-        /*if (progress > 1) {
+        if (progress > 1) {
             if (progress > preprogress) {
                 let aLetter = {
                     x: random(40, width-40),
@@ -313,15 +315,16 @@ function draw(){
             letters.push(aLetter);
             }
         }
+        textFont(letter_font);
         
         for (letter of letters){
             textSize(38);
             push();
             translate(letter.x, letter.y)
             rotate(letter.r);
-            image(letter_img, 0, 0, 40, 40);
+            text("a", 0, 0);
             pop();
-        }*/
+        }
 
         // Progress bar
 
@@ -341,7 +344,7 @@ function draw(){
         // Caption text
         fill(0);
         textSize(16);
-        textAlign(CENTER);
+        textFont(HalyardDisplay);
         text( "Caricamento in corso "+progress+ " cartoline di "+numbers_of_cartoline, width/2, height/2);
 
         preprogress = progress;
