@@ -316,7 +316,7 @@ function draw(){
             }
         }
         textFont(letter_font);
-        fill(150);
+        fill(200);
         
         for (letter of letters){
             textSize(38);
